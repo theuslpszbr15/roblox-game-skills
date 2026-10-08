@@ -1,4 +1,4 @@
-# Como usar (passo a passo)
+﻿# Como usar (passo a passo)
 
 Você não precisa saber programar. A IA lê estas skills e segue as regras sozinha.
 
@@ -11,8 +11,8 @@ Você não precisa saber programar. A IA lê estas skills e segue as regras sozi
 Abra o chat da IA em modo **Agent** e cole isto:
 
 ```
-Baixe o repositório <LINK_DESTE_REPOSITORIO> (pode ser pelo zip em
-https://codeload.github.com/<USUARIO>/<REPO>/zip/refs/heads/main) e copie cada pasta
+Baixe o repositório https://github.com/theuslpszbr15/roblox-game-skills (pode ser pelo zip em
+https://codeload.github.com/theuslpszbr15/roblox-game-skills/zip/refs/heads/main) e copie cada pasta
 de skills/ para a pasta de skills do meu agente:
 - GitHub Copilot: ~/.copilot/skills/
 - Claude Code: ~/.claude/skills/
