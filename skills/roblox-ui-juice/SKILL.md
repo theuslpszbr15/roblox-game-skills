@@ -11,6 +11,22 @@ description: "Use when building or polishing Roblox UI: animated buttons (hover/
 - Seen in references (Figma + Framewisp): squish on click, icons fly out on every click, icon rotates on hover, outline keeps moving, light sweeps across the label.
 - Use `Activated` (mouse, touch and gamepad). Cover states: default, hover, pressed, focused, selected, disabled, loading, error, success.
 
+## Premium button anatomy (phoxik "INDEX" button, Figma -> Framewisp, frame by frame)
+Build order seen in Figma (85 s video), each layer maps to a Roblox object:
+1. Base rectangle ~300x100: vertical linear gradient light -> saturated (e.g. #BFE6FF -> #2F9BFF) = `Frame` + `UIGradient` (Rotation 90).
+2. Outside stroke, dark (#0B1E33, ~4-6 px) = `UIStroke` (ApplyStrokeMode Border). Rounded corners small (`UICorner` 8-12 px).
+3. Pattern overlay (diamond/lattice image) in a mask group, blend Overlay/Soft light, low opacity = `ImageLabel` ScaleType Tile, ImageTransparency ~0.8, inside a `ClipsDescendants` frame.
+4. Label in a chunky pixel/display font, white fill with a dark thick stroke = `TextLabel` + `UIStroke` (Contextual) 3 px.
+5. Icon (book) bigger than the bar, tilted ~-15 deg and poking out of the left edge (breaks the frame = feels 3D).
+6. Thin white diagonal stripes for shine; a gradient border rectangle on top.
+Framewisp tags (layer name suffix) and their Roblox equivalent:
+- `_smooth` (group): hover scale 1.08, press scale 0.9, optional hover/click sound -> `UIScale` tweens.
+- `_stroke` (border rectangle): gradient on the outline rotating 360 deg/s, gradient angle 360, start phase 0 -> `UIStroke` + child `UIGradient` whose `Rotation` += 360*dt (Heartbeat).
+- `_lean` (icon): tilts toward the cursor / rotates on hover -> tween icon `Rotation` (-15 -> -5) and slight scale on hover.
+- `_gleam` (text): light sweep across the label -> `UIGradient` on the TextLabel with a white band, tween `Offset` X -1 -> 1 every ~2.5 s.
+- `_burst` (group): icons fly out on every click -> icon burst (below).
+Rules: one strong color per button, dark outline everywhere, icon breaks the frame, everything moves a little (stroke always, gleam periodic, icon on hover). Framewisp export needs the user's Figma + Roblox login (pairing code) - the user does it; code-first projects reproduce the same effects with the mapping above.
+
 ## Icon burst (sell / buy / reward)
 Clone a label/image N times at the origin, random size and rotation; tween up 0.32 s Quad Out to a random peak, then fall + fade 0.7 s Quad In, `Destroy` on Completed. Some emoji (e.g. 🪙) don't render in Roblox - prefer images or 💰 ⭐.
 
