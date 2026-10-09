@@ -30,3 +30,16 @@ description: "Use when building a Roblox action RPG in the style of popular voxe
 - Use Creator Store models with InsertService in Studio (edit time) or `AssetService` free models; strip every Script/LocalScript/ModuleScript, check for `require(<id>)`, anchor and group under the place's folders.
 - Prefer rigged models (Humanoid + Motor6D) so animations play; use catalog animation ids or the default R15 ones.
 - Keep a credits list (asset id + creator) in the repo.
+
+## Live play notes (second pass on the same game, inside the client)
+- Swords are pixel art in 3D: the blade is a grid of small cubes (~0.2 stud) with a dark core, bright edge pixels, a few Neon "glow" pixels and sparkle particles in the blade color. Build them from a pixel map / generator (one Part per pixel welded to an invisible Handle); share the builder between the Tool and the UI ViewportFrame.
+- Ground is a light stone floor broken by big irregular darker patches (2-3 overlapping flat boxes per patch); giant voxel landmarks (wizard hat roof, floating skull, fallen red/white mushroom caps, palm trees with spiky leaves) make each street readable.
+- Dash (Q): instant white Highlight flash on the character, a white smoke puff + ring on the ground, short burst of speed. Players get i-frames during the dash (server keeps an `invulnUntil` per player and ignores damage).
+- Interaction prompts are custom: dark brown panel, key box on the left ("E"), object name small + action big. Use `ProximityPrompt.Style = Custom` and draw a BillboardGui on `PromptShown`, call `prompt:InputHoldBegin()/End()` when the panel is tapped.
+- Name tags: name + [level] in the pixel font over every player; player list panel top right with levels.
+
+## Movement kit that matches this style
+- Sprint (Shift / mobile button): WalkSpeed 18 -> 30, stamina 100 drains 18/s, regen 22/s after 0.7 s; FOV 70 -> 82; a run animation track at Movement priority (catalog Knight run 657564596 worked); voxel footstep debris every 0.16 s colored like the floor (raycast); radial speed lines in the HUD.
+- Stamina bar: horizontal in the HUD card + vertical BillboardGui next to the character (StudsOffset is camera-relative, so it stays on the right) visible only while not full; flash red when a dash fails for lack of stamina.
+- Dash: costs 25, cooldown 0.9 s, LinearVelocity 95 studs/s for 0.2 s, lunge animation, FOV punch 92, 3 neon after-images (cloned body parts, transparency 0.62 -> 1) colored by the aura.
+- Aura: local VFX for every character from attributes `Aura` (Color3) and `AuraTier`; rising sparkles from the feet, soft sparkles on the body, and for Rare+ a ring of 14 neon segments spinning at the feet. Strength scales with tier.

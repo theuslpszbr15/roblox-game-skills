@@ -37,3 +37,10 @@ Start a test: from edit run `task.spawn(function() game:GetService('StudioTestSe
 - Write Luau files as UTF-8 without BOM. Avoid long inline PowerShell scripts; write a .ps1/.cjs file instead.
 - DataStore: skip real reads/writes in Studio tests; never save defaults after a failed load (`loaded=false`).
 - Close extra Studio windows before using the bridge (two edit plugins = two answers).
+
+## More hard-won rules (RPG project)
+- Creator Store free models: `InsertService:LoadAsset` fails ("not authorized") unless you own them; in the edit plugin `game:GetObjects("rbxassetid://ID")[1]` works. Copy the Animation objects out of its Animate script before stripping scripts, set the root as PrimaryPart and reset `root.PivotOffset` (imported rigs can carry a huge pivot offset).
+- A local referenced before its `local` declaration is a nil global at runtime and silently kills cinematics: run `luau-analyze` and look for "Unknown global" that is not a Roblox global.
+- Capturing cinematics: spawning a PowerShell per screenshot takes ~2-3 s; load the Win32 types once and capture in a loop (burst) instead. If the capture is tiny, the window was minimized: restore it first.
+- Push code without reloading: generate a Luau file that sets `.Source` of each script from the src files (long brackets) and run it in edit, then start Play.
+- Pressing keys into a game window for testing: `keybd_event` with the scan code (MapVirtualKey) after `SetForegroundWindow` (SendKeys does not reach Roblox).
