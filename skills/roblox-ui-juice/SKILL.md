@@ -29,7 +29,17 @@ Rules: one strong color per button, dark outline everywhere, icon breaks the fra
 
 ## Icon burst (sell / buy / reward)
 Clone a label/image N times at the origin, random size and rotation; tween up 0.32 s Quad Out to a random peak, then fall + fade 0.7 s Quad In, `Destroy` on Completed. Some emoji (e.g. 🪙) don't render in Roblox - prefer images or 💰 ⭐.
+## 2D particles inside UI (from the DMiner plugin tier list: Emitter2D = top tier)
+ParticleEmitter does not work in ScreenGuis. Emitter2D (plugin) turns a Frame into an emitter driven by Attributes; the same attribute set is a good spec for a code-first `uiEmitter(frame)`:
+- `EmissionRate` (/s), `EmissionShape` Rectangle|Point, `EmissionShapeStyle` Volume|Surface, `EmissionDirection` + `SpreadAngle` (deg), `Speed` (px/s, NumberRange), `Acceleration` (Vector2, gravity), `Drag`.
+- `Lifetime` (NumberRange s), `Size` / `Transparency` (NumberSequence over life), `Color` (ColorSequence), `Rotation` + `RotationSpeed`, `Squash`, `Texture` (image id), `FlipbookLayout`/`FlipbookFramerate`, `ZIndex`, `Enabled`, `IgnoreClipsDescendants`.
+- Implementation: pool ImageLabels, step them on RenderStepped (pos += vel*dt, vel += acc*dt, vel *= 1-drag*dt), sample sequences by age/life, `Emit(n)` for bursts. Cap ~60 live particles per emitter for mobile.
+- Use for: sparkles around rare cards, embers on boss health bar, confetti on level up, stars around premium buttons.
 
+## Item icons rendered from 3D models (the "crazy" plugin in the same video)
+Icon/thumbnail render plugins take a model, frame it with a camera and export a PNG with **outline**, **drop shadow** (opacity ~90, distance 4, blur 3-5, angle 45), inner shadow and presets. Code-first equivalent at runtime: `ViewportFrame` + cloned model + Camera fitted to the bounding box (FieldOfView 20-30, 3/4 angle), plus a duplicate dark ViewportFrame offset (4,4) with ImageTransparency 0.6 as the drop shadow and a `UIStroke` on the card. All item cards in a game must use the same angle, light and shadow so the inventory looks like one set.
+
+Plugins seen as low value in that list: "googly eye" avatars / Team Create cursors (fun, no gameplay value).
 ## Layout tokens
 - Spacing 4/8/12/16/24/32/48 px; text 12/14/16/18/24/32/48; one body font + one display font (`FontFace`).
 - `UIPadding` and `UIListLayout.Padding` instead of ad-hoc offsets. `UITextSizeConstraint` with TextScaled; `UISizeConstraint` pixel floors.

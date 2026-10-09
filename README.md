@@ -21,6 +21,7 @@ Cada pasta em `skills/` tem um `SKILL.md` com frontmatter `name` + `description`
 | `roblox-camera-cinematics` | Head bob, shake, cinemáticas, pop-in de recompensa |
 | `roblox-reward-reveal` | Abertura de caixa/gacha passo a passo + regras de chances |
 | `roblox-game-design-monetization` | Escolher ideia, retenção, economia, monetização (inclui pay-to-win) |
+| `roblox-rpg-dungeon-hub` | RPG com hub, filas de dungeon, NPC com dialogo, cutscene de chefao, arsenal e baus |
 | `roblox-build-workflow` | PRD curto, fatias jogáveis, QA antes de publicar |
 
 ## Créditos
